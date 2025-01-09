@@ -22,6 +22,7 @@ function QuestionPage() {
       const response = await fetch(`${apiUrl}/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ userId: 1, answers: [] }), // 예시 데이터
       });
 
