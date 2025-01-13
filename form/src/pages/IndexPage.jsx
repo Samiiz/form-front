@@ -50,7 +50,7 @@ function IndexPage() {
                 <button onClick={fetchData} className="btn btn-primary px-4 py-2 mb-3">
                   데이터 가져오기
                 </button>
-                <button onClick={goToSurvey} className="btn btn-secondary px-4 py-2">
+                <button onClick={goToSurvey} className="btn btn-secondary px-4 py-2 mb-3">
                   다음
                 </button>
               </div>
