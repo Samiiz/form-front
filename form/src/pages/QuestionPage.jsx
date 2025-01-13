@@ -31,8 +31,13 @@ function QuestionPage() {
     const fetchQuestionData = async () => {
       try {
         // 총 질문 개수와 현재 질문을 API로 가져오기
-        const [questionResponse, totalResponse] = await Promise.all([
-          fetch(`${apiUrl}/questions/${id}`, {
+        const [questionResponse, choiceResponse, totalResponse] = await Promise.all([
+          fetch(`${apiUrl}/question/${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }),
+          fetch(`${apiUrl}/choice/${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -44,11 +49,13 @@ function QuestionPage() {
           }),
         ]);
 
-        if (!questionResponse.ok || !totalResponse.ok) {
-          throw new Error(`API 요청 실패: ${questionResponse.status}`);
+        if (!questionResponse.ok || !choiceResponse.ok || !totalResponse.ok) {
+            throw new Error(`API 요청 실패`);
         }
+          
 
         const questionData = await questionResponse.json();
+        const choiceData = await choiceResponse.json();
         const totalData = await totalResponse.json();
 
         setTotalQuestions(totalData.total); // 전체 질문 개수 저장
@@ -58,9 +65,9 @@ function QuestionPage() {
           image: questionData.image,
         });
         setChoices(
-          questionData.choices
-            .filter((choice) => choice.is_active)
-            .sort((a, b) => b.sqe - a.sqe)
+            (choiceData.choices || [])
+              .filter((choice) => choice.is_active)
+              .sort((a, b) => b.sqe - a.sqe)
         );
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
