@@ -143,7 +143,7 @@ function QuestionPage() {
 
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100">
-      <div className="card mx-auto" style={{ maxWidth: "600px", padding: "20px" }}>
+      <div className="card mx-auto" style={{ width: "600px", padding: "20px", maxWidth: "100%" }}>
         <h2 className="text-center">{question?.title}</h2>
         {question?.image && (
           <div className="text-center">
@@ -152,8 +152,8 @@ function QuestionPage() {
               alt="질문 이미지"
               className="img-fluid"
               style={{
-                maxWidth: "100%",
-                height: "300px", // 일정한 높이로 통일
+                width: "100%", // 이미지의 너비를 카드에 맞춤
+                height: "300px", // 고정 높이
                 objectFit: "cover", // 비율에 맞게 이미지 자르기
               }}
             />
