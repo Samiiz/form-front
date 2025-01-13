@@ -142,7 +142,7 @@ function QuestionPage() {
   const isLastQuestion = parseInt(id) === totalQuestions; // 현재 질문이 마지막 질문인지 확인
 
   return (
-    <div className="container mt-4">
+    <div className="d-flex justify-content-center align-items-center min-vh-100">
       <div className="card mx-auto" style={{ maxWidth: "600px", padding: "20px" }}>
         <h2 className="text-center">{question?.title}</h2>
         {question?.image && (
@@ -151,7 +151,11 @@ function QuestionPage() {
               src={question.image}
               alt="질문 이미지"
               className="img-fluid"
-              style={{ maxWidth: "100%", height: "auto" }}
+              style={{
+                maxWidth: "100%",
+                height: "300px", // 일정한 높이로 통일
+                objectFit: "cover", // 비율에 맞게 이미지 자르기
+              }}
             />
           </div>
         )}
