@@ -62,7 +62,7 @@ function QuestionPage() {
 
         setQuestion({
           title: questionData.question.title,
-          image: questionData.question.image,
+          image: questionData.question.image.url,
         });
         setChoices(
             (choiceData.choices || [])
