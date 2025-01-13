@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../ApiContext"; // Context 사용
+import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS import
 
 function SignupPage() {
   const { apiUrl } = useApi(); // API URL 가져오기
@@ -55,7 +56,7 @@ function SignupPage() {
       const result = await response.json();
       if (response.ok) {
         sessionStorage.setItem("userId", result.user_id); // userId 저장
-        alert(result.massage);
+        alert(result.message);
         navigate("/question/1"); // 첫 번째 질문으로 이동
       } else {
         alert(`회원가입 실패: ${result.error}`);
@@ -67,75 +68,84 @@ function SignupPage() {
   };
 
   return (
-    <div className="container">
-      <h1>회원가입</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            이름:
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+    <div className="container-fluid bg-light py-5" style={{ minHeight: "100vh" }}>
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-8 col-lg-6">
+          <div className="card shadow">
+            <div className="card-body p-4">
+              <h2 className="card-title text-center mb-4 fw-bold">회원가입</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label className="form-label">이름</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="form-control"
+                    required
+                  />
+                  {errors.name && <p className="text-danger">{errors.name}</p>}
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">이메일</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="form-control"
+                    required
+                  />
+                  {errors.email && <p className="text-danger">{errors.email}</p>}
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">성별</label>
+                  <div>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="male"
+                      checked={formData.gender === "male"}
+                      onChange={handleChange}
+                    />
+                    남성
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="female"
+                      checked={formData.gender === "female"}
+                      onChange={handleChange}
+                    />
+                    여성
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">나이</label>
+                  <select
+                    name="age"
+                    value={formData.age}
+                    onChange={handleChange}
+                    className="form-select"
+                    required
+                  >
+                    <option value="teen">10대</option>
+                    <option value="twenty">20대</option>
+                    <option value="thirty">30대</option>
+                    <option value="fourty">40대</option>
+                    <option value="fifty">50대 이상</option>
+                  </select>
+                </div>
+                <div className="text-center">
+                  <button type="submit" className="btn btn-primary px-4 py-2">
+                    회원가입
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div>
-          <label>
-            이메일:
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
-        </div>
-        <div>
-          <label>
-            성별:
-            <input
-              type="radio"
-              name="gender"
-              value="male"
-              checked={formData.gender === "male"}
-              onChange={handleChange}
-            />
-            남성
-            <input
-              type="radio"
-              name="gender"
-              value="female"
-              checked={formData.gender === "female"}
-              onChange={handleChange}
-            />
-            여성
-          </label>
-        </div>
-        <div>
-          <label>
-            나이:
-            <select
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              required
-            >
-              <option value="teen">10대</option>
-              <option value="twenty">20대</option>
-              <option value="thirty">30대</option>
-              <option value="fourty">40대</option>
-              <option value="fifty">50대 이상</option>
-            </select>
-          </label>
-        </div>
-        <button type="submit">회원가입</button>
-      </form>
+      </div>
     </div>
   );
 }
