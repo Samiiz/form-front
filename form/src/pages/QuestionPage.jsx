@@ -11,7 +11,7 @@ function QuestionPage() {
   const [selectedChoice, setSelectedChoice] = useState(null); // 선택한 데이터
   const [answers, setAnswers] = useState(() => JSON.parse(sessionStorage.getItem("answers")) || []); // 세션에서 초기화
   const [loading, setLoading] = useState(true);
-  const [isLastQuestion, setIsLastQuestion] = useState(false);
+  const [totalQuestions, setTotalQuestions] = useState(0); // 전체 질문 개수
 
   const userId = sessionStorage.getItem("userId"); // 세션에서 userId 가져오기
 
@@ -30,25 +30,38 @@ function QuestionPage() {
 
     const fetchQuestionData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/questions/${id}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
-        if (!response.ok) {
-          throw new Error(`API 요청 실패: ${response.status}`);
+        // 총 질문 개수와 현재 질문을 API로 가져오기
+        const [questionResponse, totalResponse] = await Promise.all([
+          fetch(`${apiUrl}/questions/${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }),
+          fetch(`${apiUrl}/questions/${id}/count`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }),
+        ]);
+
+        if (!questionResponse.ok || !totalResponse.ok) {
+          throw new Error(`API 요청 실패: ${questionResponse.status}`);
         }
-        const data = await response.json();
+
+        const questionData = await questionResponse.json();
+        const totalData = await totalResponse.json();
+
+        setTotalQuestions(totalData.total); // 전체 질문 개수 저장
+
         setQuestion({
-          title: data.title,
-          image: data.image,
+          title: questionData.title,
+          image: questionData.image,
         });
         setChoices(
-          data.choices
+          questionData.choices
             .filter((choice) => choice.is_active)
             .sort((a, b) => b.sqe - a.sqe)
         );
-        setIsLastQuestion(data.is_last_question); // API에서 받아온 값으로 마지막 질문 여부 설정
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
         alert("질문 데이터를 가져오는 중 문제가 발생했습니다.");
@@ -78,10 +91,8 @@ function QuestionPage() {
     sessionStorage.setItem("answers", JSON.stringify(updatedAnswers));
     setAnswers(updatedAnswers);
 
-    // 마지막 질문이 아니면 다음 질문으로 이동
-    if (!isLastQuestion) {
-      navigate(`/question/${parseInt(id) + 1}`);
-    }
+    // 다음 질문으로 이동
+    navigate(`/question/${parseInt(id) + 1}`);
   };
 
   const handleSubmit = async () => {
@@ -120,6 +131,8 @@ function QuestionPage() {
   if (loading) {
     return <div>로딩 중...</div>;
   }
+
+  const isLastQuestion = parseInt(id) === totalQuestions; // 현재 질문이 마지막 질문인지 확인
 
   return (
     <div className="container">
