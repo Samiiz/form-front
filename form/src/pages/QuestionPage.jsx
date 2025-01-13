@@ -70,7 +70,7 @@ function QuestionPage() {
       {/* 다음 버튼 */}
       {!isLastQuestion && (
         <button
-          onClick={() => navigate(`/questions/${parseInt(id) + 1}`)}
+          onClick={() => navigate(`/question/${parseInt(id) + 1}`)}
           style={{ marginTop: "20px" }}
         >
           다음
