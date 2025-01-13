@@ -117,7 +117,7 @@ function QuestionPage() {
 
       alert("제출이 완료되었습니다!");
       sessionStorage.removeItem("answers");
-      navigate("/thank-you");
+      navigate("/resurlt");
     } catch (error) {
       console.error("제출 중 오류 발생:", error);
       alert("제출에 실패했습니다. 다시 시도해주세요.");
