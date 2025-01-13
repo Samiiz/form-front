@@ -61,8 +61,8 @@ function QuestionPage() {
         setTotalQuestions(totalData.total); // 전체 질문 개수 저장
 
         setQuestion({
-          title: questionData.title,
-          image: questionData.image,
+          title: questionData.question.title,
+          image: questionData.question.image,
         });
         setChoices(
             (choiceData.choices || [])
