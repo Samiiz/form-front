@@ -37,7 +37,7 @@ function QuestionPage() {
             headers: { "Content-Type": "application/json" },
             credentials: "include",
           }),
-          fetch(`${apiUrl}/questions/${id}/count`, {
+          fetch(`${apiUrl}/questions/count`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
