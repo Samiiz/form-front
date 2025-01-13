@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../ApiContext";
-import "./QuestionPage.css"; // CSS 파일 추가
+import "bootstrap/dist/css/bootstrap.min.css"; // 부트스트랩 CSS 추가
+import "./QuestionPage.css"; // 추가적인 커스텀 스타일
 
 function QuestionPage() {
   const { id } = useParams();
@@ -120,30 +121,48 @@ function QuestionPage() {
   const isLastQuestion = parseInt(id) === totalQuestions;
 
   return (
-    <div className="question-page">
-      <div className="content-container">
-        <h2 className="question-title">{question?.title}</h2>
-        {question?.image && <img className="question-image" src={question.image} alt="질문 이미지" />}
-        <div className="choices-container">
-          {choices.map((choice) => (
-            <div
-              key={choice.id}
-              className={`choice-item ${selectedChoice?.id === choice.id ? "selected" : ""}`}
-              onClick={() => handleChoiceSelect(choice)}
-            >
-              {choice.content}
+    <div className="container question-page mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6">
+          <div className="card shadow-sm">
+            <div className="card-body">
+              <h2 className="text-center mb-4">{question?.title}</h2>
+              {question?.image && (
+                <div className="text-center mb-4">
+                  <img
+                    className="img-fluid rounded"
+                    src={question.image}
+                    alt="질문 이미지"
+                    style={{ maxHeight: "300px" }}
+                  />
+                </div>
+              )}
+              <div className="choices-container mb-4">
+                {choices.map((choice) => (
+                  <div
+                    key={choice.id}
+                    className={`choice-item mb-2 p-3 rounded ${
+                      selectedChoice?.id === choice.id ? "bg-primary text-white" : "bg-light"
+                    }`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleChoiceSelect(choice)}
+                  >
+                    {choice.content}
+                  </div>
+                ))}
+              </div>
+              {!isLastQuestion ? (
+                <button className="btn btn-primary w-100" onClick={handleNext}>
+                  다음
+                </button>
+              ) : (
+                <button className="btn btn-success w-100" onClick={handleSubmit}>
+                  제출하기
+                </button>
+              )}
             </div>
-          ))}
+          </div>
         </div>
-        {!isLastQuestion ? (
-          <button className="next-button" onClick={handleNext}>
-            다음
-          </button>
-        ) : (
-          <button className="submit-button" onClick={handleSubmit}>
-            제출하기
-          </button>
-        )}
       </div>
     </div>
   );
