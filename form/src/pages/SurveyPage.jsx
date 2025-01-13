@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../ApiContext"; // Context 사용
+import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS import
 
 function SurveyPage() {
   const navigate = useNavigate();
@@ -50,24 +51,40 @@ function SurveyPage() {
   };
 
   if (loading) {
-    return <div className="text-center">로딩 중...</div>; // 로딩 화면
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">로딩 중...</span>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="container text-center">
-      <header>
-        <h1 className="display-4 mb-4">설문조사에 참여해주세요!</h1>
-      </header>
-      <section>
-        {image ? (
-          <img src={image} alt="Survey Main" className="img-fluid mb-4" />
-        ) : (
-          <p>이미지를 로드할 수 없습니다.</p> // 이미지 로드 실패 시 메시지
-        )}
-        <button className="btn btn-primary btn-lg" onClick={handleStart}>
-          회원가입 시작하기
-        </button>
-      </section>
+    <div className="container-fluid bg-light py-5" style={{ minHeight: "100vh" }}>
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-8 col-lg-6">
+          <div className="card shadow">
+            <div className="card-body p-4">
+              <h2 className="card-title text-center mb-4 fw-bold">설문조사에 참여해주세요!</h2>
+
+              <section className="text-center mb-4">
+                {image ? (
+                  <img src={image} alt="Survey Main" className="img-fluid rounded" style={{ maxHeight: "300px", objectFit: "contain" }} />
+                ) : (
+                  <p>이미지를 로드할 수 없습니다.</p> // 이미지 로드 실패 시 메시지
+                )}
+              </section>
+
+              <div className="text-center">
+                <button onClick={handleStart} className="btn btn-primary px-4 py-2">
+                  회원가입 시작하기
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
