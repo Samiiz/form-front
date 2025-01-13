@@ -5,6 +5,8 @@ import IndexPage from "./pages/IndexPage";
 import SignupPage from "./pages/SignupPage";
 import SurveyPage from "./pages/SurveyPage";
 import QuestionPage from "./pages/QuestionPage";
+import './App.css';
+
 
 function App() {
   return (
