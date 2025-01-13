@@ -78,8 +78,10 @@ function QuestionPage() {
     sessionStorage.setItem("answers", JSON.stringify(updatedAnswers));
     setAnswers(updatedAnswers);
 
-    // 다음 질문으로 이동
-    navigate(`/question/${parseInt(id) + 1}`);
+    // 마지막 질문이 아니면 다음 질문으로 이동
+    if (!isLastQuestion) {
+      navigate(`/question/${parseInt(id) + 1}`);
+    }
   };
 
   const handleSubmit = async () => {
