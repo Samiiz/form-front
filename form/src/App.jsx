@@ -14,7 +14,7 @@ function App() {
           <Route path="/" element={<IndexPage />} />
           <Route path="/survey" element={<SurveyPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/signup" element={<QuestionPage />} />
+          <Route path="/question/:id" element={<QuestionPage />} />
         </Routes>
       </Router>
     </ApiProvider>
