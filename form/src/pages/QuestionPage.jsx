@@ -143,7 +143,7 @@ function QuestionPage() {
 
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100">
-      <div className="card mx-auto" style={{ width: "600px", padding: "20px", maxWidth: "100%" }}>
+      <div className="card" style={{ width: "600px", padding: "20px", maxWidth: "100%" }}>
         <h2 className="text-center">{question?.title}</h2>
         {question?.image && (
           <div className="text-center">
