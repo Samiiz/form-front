@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../ApiContext";
 import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS import
 
-function StatsPage() {
+function ResultPage() {
   const { apiUrl } = useApi();
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -94,4 +94,4 @@ function StatsPage() {
   );
 }
 
-export default StatsPage;
+export default ResultPage;
