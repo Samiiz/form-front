@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../ApiContext";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS import
 
 function QuestionPage() {
   const { id } = useParams();
@@ -126,7 +126,7 @@ function QuestionPage() {
 
   if (loading) {
     return (
-      <div className="min-vh-100 d-flex justify-content-center align-items-center">
+      <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">로딩 중...</span>
         </div>
@@ -137,77 +137,102 @@ function QuestionPage() {
   const isLastQuestion = parseInt(id) === totalQuestions;
 
   return (
-    <div className="min-vh-100 d-flex justify-content-center align-items-center bg-light">
-      <div className="container py-5">
-        <div className="row justify-content-center">
-          <div className="col-12 col-md-8 col-lg-6">
-            <div className="card shadow-sm">
-              <div className="card-body p-4">
-                <h2 className="card-title text-center mb-4">{question?.title}</h2>
-                {question?.image && (
-                  <div className="text-center mb-4">
-                    <img
-                      src={question.image}
-                      alt="질문 이미지"
-                      className="img-fluid rounded"
-                      style={{ maxHeight: "300px", objectFit: "contain" }}
-                    />
-                  </div>
-                )}
-                <div className="choices-container">
-                  {choices.map((choice) => (
-                    <div
-                      key={choice.id}
-                      onClick={() => handleChoiceSelect(choice)}
-                      className={`choice-item p-3 mb-3 rounded cursor-pointer ${
-                        selectedChoice?.id === choice.id
-                          ? "border border-primary bg-light"
-                          : "border"
-                      }`}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <div className="d-flex align-items-center">
-                        <div className="me-3">
-                          <div
-                            className={`rounded-circle border ${
-                              selectedChoice?.id === choice.id
-                                ? "border-primary"
-                                : "border-secondary"
-                            }`}
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                              backgroundColor:
-                                selectedChoice?.id === choice.id
-                                  ? "#0d6efd"
-                                  : "transparent",
-                            }}
-                          ></div>
-                        </div>
-                        <div>{choice.content}</div>
+    <div className="container-fluid bg-light py-5" style={{ minHeight: "100vh" }}>
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-8 col-lg-6">
+          <div className="card shadow">
+            <div className="card-body p-4">
+              <div className="progress mb-4" style={{ height: "6px" }}>
+                <div 
+                  className="progress-bar" 
+                  role="progressbar" 
+                  style={{ width: `${(parseInt(id) / totalQuestions) * 100}%` }}
+                  aria-valuenow={(parseInt(id) / totalQuestions) * 100}
+                  aria-valuemin="0" 
+                  aria-valuemax="100"
+                ></div>
+              </div>
+              
+              <h2 className="card-title text-center mb-4 fw-bold">
+                {question?.title}
+              </h2>
+              
+              {question?.image && (
+                <div className="text-center mb-4">
+                  <img
+                    src={question.image}
+                    alt="질문 이미지"
+                    className="img-fluid rounded"
+                    style={{ 
+                      maxHeight: "300px", 
+                      objectFit: "contain",
+                      width: "auto",
+                      maxWidth: "100%" 
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="choices-container">
+                {choices.map((choice) => (
+                  <div
+                    key={choice.id}
+                    onClick={() => handleChoiceSelect(choice)}
+                    className={`
+                      d-flex align-items-center p-3 mb-3 rounded 
+                      ${selectedChoice?.id === choice.id 
+                        ? 'bg-primary bg-opacity-10 border-primary' 
+                        : 'bg-white border'
+                      }
+                      border hover-shadow transition
+                    `}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="me-3">
+                      <div
+                        className={`rounded-circle border d-flex align-items-center justify-content-center
+                          ${selectedChoice?.id === choice.id ? 'border-primary' : 'border-secondary'}
+                        `}
+                        style={{
+                          width: "24px",
+                          height: "24px",
+                          backgroundColor: selectedChoice?.id === choice.id ? "#0d6efd" : "transparent",
+                        }}
+                      >
+                        {selectedChoice?.id === choice.id && (
+                          <span className="text-white" style={{ fontSize: "12px" }}>✓</span>
+                        )}
                       </div>
                     </div>
-                  ))}
-                </div>
-                <div className="text-center mt-4">
-                  {!isLastQuestion ? (
-                    <button
-                      onClick={handleNext}
-                      className="btn btn-primary px-4 py-2"
-                      disabled={!selectedChoice}
-                    >
-                      다음
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleSubmit}
-                      className="btn btn-success px-4 py-2"
-                      disabled={!selectedChoice}
-                    >
-                      제출하기
-                    </button>
-                  )}
-                </div>
+                    <div className={`${selectedChoice?.id === choice.id ? 'text-primary' : ''}`}>
+                      {choice.content}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-center mt-4">
+                {!isLastQuestion ? (
+                  <button
+                    onClick={handleNext}
+                    className="btn btn-primary px-4 py-2"
+                    disabled={!selectedChoice}
+                  >
+                    다음 문항
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleSubmit}
+                    className="btn btn-success px-4 py-2"
+                    disabled={!selectedChoice}
+                  >
+                    제출하기
+                  </button>
+                )}
+              </div>
+              
+              <div className="text-center mt-3 text-muted">
+                <small>{id} / {totalQuestions} 문항</small>
               </div>
             </div>
           </div>
