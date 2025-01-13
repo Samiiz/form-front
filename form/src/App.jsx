@@ -5,7 +5,7 @@ import IndexPage from "./pages/IndexPage";
 import SignupPage from "./pages/SignupPage";
 import SurveyPage from "./pages/SurveyPage";
 import QuestionPage from "./pages/QuestionPage";
-import QuestionPage from "./pages/resultPage";
+import ResultPage from "./pages/ResultPage";
 import './App.css';
 
 
@@ -18,7 +18,7 @@ function App() {
           <Route path="/survey" element={<SurveyPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/question/:id" element={<QuestionPage />} />
-          <Route path="/resurlt" element={<resultPage />} />
+          <Route path="/resurlt" element={<ResultPage />} />
         </Routes>
       </Router>
     </ApiProvider>
