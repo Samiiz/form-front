@@ -54,7 +54,7 @@ function SignupPage() {
 
       const result = await response.json();
       if (response.ok) {
-        sessionStorage.setItem("userId", result.user.id); // userId 저장
+        sessionStorage.setItem("userId", result.user_id); // userId 저장
         alert(result.massage);
         navigate("/question/1"); // 첫 번째 질문으로 이동
       } else {
