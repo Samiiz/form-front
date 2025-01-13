@@ -21,7 +21,7 @@ function QuestionPage() {
 
     const fetchQuestionData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/questions/1`);
+        const response = await fetch(`${apiUrl}/questions/${id}`);
         if (!response.ok) {
           throw new Error(`API 요청 실패: ${response.status}`);
         }
