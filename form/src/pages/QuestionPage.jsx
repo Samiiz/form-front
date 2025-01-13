@@ -8,12 +8,12 @@ function QuestionPage() {
   const { apiUrl } = useApi();
   const [question, setQuestion] = useState(null);
   const [choices, setChoices] = useState([]);
-  const [selectedChoice, setSelectedChoice] = useState(null); // 선택한 데이터
-  const [answers, setAnswers] = useState(() => JSON.parse(sessionStorage.getItem("answers")) || []); // 세션에서 초기화
+  const [selectedChoice, setSelectedChoice] = useState(null);
+  const [answers, setAnswers] = useState(() => JSON.parse(sessionStorage.getItem("answers")) || []);
   const [loading, setLoading] = useState(true);
-  const [totalQuestions, setTotalQuestions] = useState(0); // 전체 질문 개수
+  const [totalQuestions, setTotalQuestions] = useState(0);
 
-  const userId = sessionStorage.getItem("userId"); // 세션에서 userId 가져오기
+  const userId = sessionStorage.getItem("userId");
 
   useEffect(() => {
     if (!userId) {
@@ -30,7 +30,6 @@ function QuestionPage() {
 
     const fetchQuestionData = async () => {
       try {
-        // 총 질문 개수와 현재 질문을 API로 가져오기
         const [questionResponse, choiceResponse, totalResponse] = await Promise.all([
           fetch(`${apiUrl}/question/${id}`, {
             method: "GET",
@@ -50,24 +49,23 @@ function QuestionPage() {
         ]);
 
         if (!questionResponse.ok || !choiceResponse.ok || !totalResponse.ok) {
-            throw new Error(`API 요청 실패`);
+          throw new Error(`API 요청 실패`);
         }
-          
 
         const questionData = await questionResponse.json();
         const choiceData = await choiceResponse.json();
         const totalData = await totalResponse.json();
 
-        setTotalQuestions(totalData.total); // 전체 질문 개수 저장
+        setTotalQuestions(totalData.total);
 
         setQuestion({
           title: questionData.question.title,
           image: questionData.question.image.url,
         });
         setChoices(
-            (choiceData.choices || [])
-              .filter((choice) => choice.is_active)
-              .sort((a, b) => b.sqe - a.sqe)
+          (choiceData.choices || [])
+            .filter((choice) => choice.is_active)
+            .sort((a, b) => b.sqe - a.sqe)
         );
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
@@ -81,7 +79,7 @@ function QuestionPage() {
   }, [apiUrl, id, navigate, userId]);
 
   const handleChoiceSelect = (choice) => {
-    setSelectedChoice(choice); // 선택한 데이터를 상태로 설정
+    setSelectedChoice(choice);
   };
 
   const handleNext = () => {
@@ -90,15 +88,9 @@ function QuestionPage() {
       return;
     }
 
-    // 선택한 데이터를 세션에 저장
-    const updatedAnswers = [
-      ...answers,
-      { userId, choiceId: selectedChoice.id },
-    ];
+    const updatedAnswers = [...answers, { userId, choiceId: selectedChoice.id }];
     sessionStorage.setItem("answers", JSON.stringify(updatedAnswers));
     setAnswers(updatedAnswers);
-
-    // 다음 질문으로 이동
     navigate(`/question/${parseInt(id) + 1}`);
   };
 
@@ -108,11 +100,7 @@ function QuestionPage() {
       return;
     }
 
-    // 마지막 선택 데이터를 저장
-    const finalAnswers = [
-      ...answers,
-      { userId, choiceId: selectedChoice.id },
-    ];
+    const finalAnswers = [...answers, { userId, choiceId: selectedChoice.id }];
 
     try {
       const response = await fetch(`${apiUrl}/submit`, {
@@ -127,8 +115,8 @@ function QuestionPage() {
       }
 
       alert("제출이 완료되었습니다!");
-      sessionStorage.removeItem("answers"); // 세션 데이터 초기화
-      navigate("/thank-you"); // 완료 페이지로 이동
+      sessionStorage.removeItem("answers");
+      navigate("/thank-you");
     } catch (error) {
       console.error("제출 중 오류 발생:", error);
       alert("제출에 실패했습니다. 다시 시도해주세요.");
@@ -136,41 +124,94 @@ function QuestionPage() {
   };
 
   if (loading) {
-    return <div>로딩 중...</div>;
+    return (
+      <div className="min-vh-100 d-flex justify-content-center align-items-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">로딩 중...</span>
+        </div>
+      </div>
+    );
   }
 
-  const isLastQuestion = parseInt(id) === totalQuestions; // 현재 질문이 마지막 질문인지 확인
+  const isLastQuestion = parseInt(id) === totalQuestions;
 
   return (
-    <div className="container">
-      <h2>{question?.title}</h2>
-      {question?.image && <img src={question.image} alt="질문 이미지" />}
-      <div className="choices-container">
-        {choices.map((choice) => (
-          <div
-            key={choice.id}
-            onClick={() => handleChoiceSelect(choice)}
-            style={{
-              padding: "10px",
-              margin: "5px",
-              border: selectedChoice?.id === choice.id ? "2px solid blue" : "1px solid gray",
-              cursor: "pointer",
-            }}
-          >
-            {choice.content}
+    <div className="min-vh-100 d-flex justify-content-center align-items-center bg-light">
+      <div className="container py-5">
+        <div className="row justify-content-center">
+          <div className="col-12 col-md-8 col-lg-6">
+            <div className="card shadow-sm">
+              <div className="card-body p-4">
+                <h2 className="card-title text-center mb-4">{question?.title}</h2>
+                {question?.image && (
+                  <div className="text-center mb-4">
+                    <img
+                      src={question.image}
+                      alt="질문 이미지"
+                      className="img-fluid rounded"
+                      style={{ maxHeight: "300px", objectFit: "contain" }}
+                    />
+                  </div>
+                )}
+                <div className="choices-container">
+                  {choices.map((choice) => (
+                    <div
+                      key={choice.id}
+                      onClick={() => handleChoiceSelect(choice)}
+                      className={`choice-item p-3 mb-3 rounded cursor-pointer ${
+                        selectedChoice?.id === choice.id
+                          ? "border border-primary bg-light"
+                          : "border"
+                      }`}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div className="d-flex align-items-center">
+                        <div className="me-3">
+                          <div
+                            className={`rounded-circle border ${
+                              selectedChoice?.id === choice.id
+                                ? "border-primary"
+                                : "border-secondary"
+                            }`}
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              backgroundColor:
+                                selectedChoice?.id === choice.id
+                                  ? "#0d6efd"
+                                  : "transparent",
+                            }}
+                          ></div>
+                        </div>
+                        <div>{choice.content}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="text-center mt-4">
+                  {!isLastQuestion ? (
+                    <button
+                      onClick={handleNext}
+                      className="btn btn-primary px-4 py-2"
+                      disabled={!selectedChoice}
+                    >
+                      다음
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleSubmit}
+                      className="btn btn-success px-4 py-2"
+                      disabled={!selectedChoice}
+                    >
+                      제출하기
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-        ))}
+        </div>
       </div>
-      {/* 다음 또는 제출 버튼 */}
-      {!isLastQuestion ? (
-        <button onClick={handleNext} style={{ marginTop: "20px" }}>
-          다음
-        </button>
-      ) : (
-        <button onClick={handleSubmit} style={{ marginTop: "20px" }}>
-          제출하기
-        </button>
-      )}
     </div>
   );
 }
