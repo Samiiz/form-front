@@ -52,7 +52,6 @@ function QuestionPage() {
         if (!questionResponse.ok || !choiceResponse.ok || !totalResponse.ok) {
             throw new Error(`API 요청 실패`);
         }
-          
 
         const questionData = await questionResponse.json();
         const choiceData = await choiceResponse.json();
@@ -144,18 +143,13 @@ function QuestionPage() {
   return (
     <div className="container">
       <h2>{question?.title}</h2>
-      {question?.image && <img src={question.image} alt="질문 이미지" />}
+      {question?.image && <img src={question.image} alt="질문 이미지" className="img-fluid mb-4" />}
       <div className="choices-container">
         {choices.map((choice) => (
           <div
             key={choice.id}
             onClick={() => handleChoiceSelect(choice)}
-            style={{
-              padding: "10px",
-              margin: "5px",
-              border: selectedChoice?.id === choice.id ? "2px solid blue" : "1px solid gray",
-              cursor: "pointer",
-            }}
+            className={`choice-block ${selectedChoice?.id === choice.id ? "selected" : ""}`}
           >
             {choice.content}
           </div>
@@ -163,11 +157,11 @@ function QuestionPage() {
       </div>
       {/* 다음 또는 제출 버튼 */}
       {!isLastQuestion ? (
-        <button onClick={handleNext} style={{ marginTop: "20px" }}>
+        <button onClick={handleNext} className="btn btn-primary btn-lg mt-3">
           다음
         </button>
       ) : (
-        <button onClick={handleSubmit} style={{ marginTop: "20px" }}>
+        <button onClick={handleSubmit} className="btn btn-success btn-lg mt-3">
           제출하기
         </button>
       )}
