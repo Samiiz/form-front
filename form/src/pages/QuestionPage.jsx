@@ -48,9 +48,7 @@ function QuestionPage() {
             .filter((choice) => choice.is_active)
             .sort((a, b) => b.sqe - a.sqe)
         );
-        if (data.is_last_question) {
-          setIsLastQuestion(true);
-        }
+        setIsLastQuestion(data.is_last_question); // API에서 받아온 값으로 마지막 질문 여부 설정
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
         alert("질문 데이터를 가져오는 중 문제가 발생했습니다.");
