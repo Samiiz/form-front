@@ -5,7 +5,7 @@ import IndexPage from "./pages/IndexPage";
 import SignupPage from "./pages/SignupPage";
 import SurveyPage from "./pages/SurveyPage";
 import QuestionPage from "./pages/QuestionPage";
-import ResultPage from "./pages/ResultPage"; // ResultPage에서 StatsPage로 수정
+import ResultPage from "./pages/ResultPage";  // 수정: ResultPage로 임포트
 import './App.css';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
           <Route path="/survey" element={<SurveyPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/question/:id" element={<QuestionPage />} />
-          <Route path="/result" element={<ResultPage />} /> {/* ResultPage -> StatsPage로 변경 */}
+          <Route path="/result" element={<ResultPage />} />  {/* 수정: ResultPage 사용 */}
         </Routes>
       </Router>
     </ApiProvider>

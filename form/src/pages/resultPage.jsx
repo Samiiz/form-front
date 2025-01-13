@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../ApiContext";
 import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS import
 
