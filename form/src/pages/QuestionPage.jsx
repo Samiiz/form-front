@@ -108,7 +108,7 @@ function QuestionPage() {
     ];
 
     try {
-      const response = await fetch(`${apiUrl}/answer`, {
+      const response = await fetch(`${apiUrl}/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
