@@ -20,7 +20,7 @@ function QuestionPage() {
     const fetchQuestionData = async () => {
       try {
         const response = await fetch(`${apiUrl}/questions/${id}`, {
-            method: "POST",
+            method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
         });
