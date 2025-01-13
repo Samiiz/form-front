@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../ApiContext";
-import "bootstrap/dist/css/bootstrap.min.css";  // Bootstrap CSS
 
 function QuestionPage() {
   const { id } = useParams();
@@ -53,6 +52,7 @@ function QuestionPage() {
         if (!questionResponse.ok || !choiceResponse.ok || !totalResponse.ok) {
             throw new Error(`API 요청 실패`);
         }
+          
 
         const questionData = await questionResponse.json();
         const choiceData = await choiceResponse.json();
@@ -142,48 +142,35 @@ function QuestionPage() {
   const isLastQuestion = parseInt(id) === totalQuestions; // 현재 질문이 마지막 질문인지 확인
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100">
-      <div className="card" style={{ width: "600px", padding: "20px", maxWidth: "100%" }}>
-        <h2 className="text-center">{question?.title}</h2>
-        {question?.image && (
-          <div className="text-center">
-            <img
-              src={question.image}
-              alt="질문 이미지"
-              className="img-fluid"
-              style={{
-                width: "100%", // 이미지의 너비를 카드에 맞춤
-                height: "300px", // 고정 높이
-                objectFit: "cover", // 비율에 맞게 이미지 자르기
-              }}
-            />
+    <div className="container">
+      <h2>{question?.title}</h2>
+      {question?.image && <img src={question.image} alt="질문 이미지" />}
+      <div className="choices-container">
+        {choices.map((choice) => (
+          <div
+            key={choice.id}
+            onClick={() => handleChoiceSelect(choice)}
+            style={{
+              padding: "10px",
+              margin: "5px",
+              border: selectedChoice?.id === choice.id ? "2px solid blue" : "1px solid gray",
+              cursor: "pointer",
+            }}
+          >
+            {choice.content}
           </div>
-        )}
-        <div className="choices-container mt-4">
-          {choices.map((choice) => (
-            <div
-              key={choice.id}
-              onClick={() => handleChoiceSelect(choice)}
-              className={`btn btn-outline-primary w-100 my-2 ${selectedChoice?.id === choice.id ? "active" : ""}`}
-              style={{ padding: "15px", cursor: "pointer" }}
-            >
-              {choice.content}
-            </div>
-          ))}
-        </div>
-        {/* 다음 또는 제출 버튼 */}
-        <div className="d-flex justify-content-center mt-4">
-          {!isLastQuestion ? (
-            <button onClick={handleNext} className="btn btn-primary w-50">
-              다음
-            </button>
-          ) : (
-            <button onClick={handleSubmit} className="btn btn-success w-50">
-              제출하기
-            </button>
-          )}
-        </div>
+        ))}
       </div>
+      {/* 다음 또는 제출 버튼 */}
+      {!isLastQuestion ? (
+        <button onClick={handleNext} style={{ marginTop: "20px" }}>
+          다음
+        </button>
+      ) : (
+        <button onClick={handleSubmit} style={{ marginTop: "20px" }}>
+          제출하기
+        </button>
+      )}
     </div>
   );
 }
