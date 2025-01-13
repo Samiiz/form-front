@@ -19,7 +19,11 @@ function QuestionPage() {
 
     const fetchQuestionData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/questions/${id}`);
+        const response = await fetch(`${apiUrl}/questions/${id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+        });
         if (!response.ok) {
           throw new Error(`API 요청 실패: ${response.status}`);
         }
