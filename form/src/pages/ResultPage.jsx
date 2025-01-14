@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useApi } from "../ApiContext";
-import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS import
+import "bootstrap/dist/css/bootstrap.min.css";
+import Plot from "react-plotly.js";
 
 function ResultPage() {
   const { apiUrl } = useApi();
@@ -18,12 +19,8 @@ function ResultPage() {
         const endpoints = [
           `${apiUrl}/stats/answer_count_by_choice`,
           `${apiUrl}/stats/answer_count_by_user`,
-          `${apiUrl}/stats/response_rate`,
           `${apiUrl}/stats/answer_count_by_question`,
-          `${apiUrl}/stats/answer_rate_by_choice`,
-          `${apiUrl}/stats/answer_count_by_age`,
-          `${apiUrl}/stats/most_chosen_choice`,
-          `${apiUrl}/stats/least_chosen_choice`,
+          `${apiUrl}/stats/answer_rate_by_choice`
         ];
 
         const responses = await Promise.all(
@@ -74,11 +71,22 @@ function ResultPage() {
                 chartData.map((data, index) => (
                   <div key={index} className="text-center mb-4">
                     <h5>{`차트 ${index + 1}`}</h5>
-                    <img
-                      src={`data:image/png;base64,${data.image}`}
-                      alt={`차트 ${index + 1}`}
-                      className="img-fluid rounded"
-                      style={{ maxHeight: "400px", objectFit: "contain" }}
+                    <Plot
+                      data={[
+                        {
+                          x: data.map(item => item.choice_id),
+                          y: data.map(item => item.answer_count),
+                          type: 'bar',
+                          name: '선택 횟수',
+                        },
+                        {
+                          x: data.map(item => item.choice_id),
+                          y: data.map(item => item.percentage),
+                          type: 'line',
+                          name: '비율 (%)',
+                        },
+                      ]}
+                      layout={{ title: '선택지별 통계' }}
                     />
                   </div>
                 ))
