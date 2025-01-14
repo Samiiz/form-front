@@ -17,10 +17,8 @@ function ResultPage() {
     const fetchChartData = async () => {
       try {
         const endpoints = [
-          `${apiUrl}/stats/answer_count_by_choice`,
-          `${apiUrl}/stats/answer_count_by_user`,
+          `${apiUrl}/stats/answer_rate_by_choice`,
           `${apiUrl}/stats/answer_count_by_question`,
-          `${apiUrl}/stats/answer_rate_by_choice`
         ];
 
         const responses = await Promise.all(
