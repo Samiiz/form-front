@@ -22,6 +22,7 @@ function SurveyPage() {
         const response = await fetch(`${apiUrl}/image/main`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         });
 
         if (!response.ok) {
