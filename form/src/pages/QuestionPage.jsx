@@ -31,13 +31,8 @@ function QuestionPage() {
 
     const fetchQuestionData = async () => {
       try {
-        const [questionResponse, choiceResponse, totalResponse] = await Promise.all([
+        const [questionResponse, totalResponse] = await Promise.all([
           fetch(`${apiUrl}/question/${id}`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }),
-          fetch(`${apiUrl}/choice/${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -49,12 +44,11 @@ function QuestionPage() {
           }),
         ]);
 
-        if (!questionResponse.ok || !choiceResponse.ok || !totalResponse.ok) {
+        if (!questionResponse.ok || !totalResponse.ok) {
           throw new Error(`API 요청 실패`);
         }
 
         const questionData = await questionResponse.json();
-        const choiceData = await choiceResponse.json();
         const totalData = await totalResponse.json();
 
         setTotalQuestions(totalData.total);
@@ -64,7 +58,7 @@ function QuestionPage() {
           image: questionData.question.image.url,
         });
         setChoices(
-          (choiceData.choices || [])
+          (questionData.choices || [])
             .filter((choice) => choice.is_active)
             .sort((a, b) => b.sqe - a.sqe)
         );
@@ -101,7 +95,7 @@ function QuestionPage() {
       return;
     }
 
-    const finalAnswers = [...answers, { userId, choiceId: selectedChoice.id }];
+    const finalAnswers = [...answers, { user_id: userId, choice_id: selectedChoice.id }];
 
     try {
       const response = await fetch(`${apiUrl}/submit`, {

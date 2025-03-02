@@ -16,7 +16,11 @@ function SignupPage() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "이름을 입력해주세요.";
+    if (!formData.name.trim()) {
+      newErrors.name = "이름을 입력해주세요.";
+    } else if (formData.name.length > 10) {
+      newErrors.name = "이름은 10자 미만입니다."
+    }
     if (!formData.email.trim()) {
       newErrors.email = "이메일을 입력해주세요.";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -58,8 +62,8 @@ function SignupPage() {
         sessionStorage.setItem("userId", result.user_id); // userId 저장
         alert(result.message);
         navigate("/question/1"); // 첫 번째 질문으로 이동
-      } else {
-        alert(`회원가입 실패: ${result.error}`);
+      } else if (!response.ok){
+        alert(`회원가입 실패: ${result.message}`);
       }
     } catch (error) {
       console.error("요청 실패:", error);
