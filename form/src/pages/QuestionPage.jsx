@@ -55,7 +55,7 @@ function QuestionPage() {
 
         setQuestion({
           title: questionData.title,
-          image: questionData.image.url,
+          image: questionData.image,
         });
         setChoices(
           (questionData.choices || [])
