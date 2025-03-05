@@ -32,15 +32,15 @@ function QuestionPage() {
     const fetchQuestionData = async () => {
       try {
         const [questionResponse, totalResponse] = await Promise.all([
-          fetch(`${apiUrl}/question/${id}`, {
+          fetch(`${apiUrl}/questions/${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
-            credentials: "include",
+            // credentials: "include",
           }),
           fetch(`${apiUrl}/questions/count`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
-            credentials: "include",
+            // credentials: "include",
           }),
         ]);
 
