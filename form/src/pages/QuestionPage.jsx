@@ -35,12 +35,12 @@ function QuestionPage() {
           fetch(`${apiUrl}/questions/${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
-            // credentials: "include",
+            credentials: "include",
           }),
           fetch(`${apiUrl}/questions/count`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
-            // credentials: "include",
+            credentials: "include",
           }),
         ]);
 
