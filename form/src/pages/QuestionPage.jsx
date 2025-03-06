@@ -83,7 +83,7 @@ function QuestionPage() {
       return;
     }
 
-    const updatedAnswers = [...answers, { userId, choiceId: selectedChoice.id }];
+    const updatedAnswers = [...answers, { user_id: userId, choice_id: selectedChoice.id }];
     sessionStorage.setItem("answers", JSON.stringify(updatedAnswers));
     setAnswers(updatedAnswers);
     navigate(`/question/${parseInt(id) + 1}`);
