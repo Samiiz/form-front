@@ -136,7 +136,7 @@ function SignupPage() {
                     <option value="teen">10대</option>
                     <option value="twenty">20대</option>
                     <option value="thirty">30대</option>
-                    <option value="fourty">40대</option>
+                    <option value="forty">40대</option>
                     <option value="fifty">50대 이상</option>
                   </select>
                 </div>

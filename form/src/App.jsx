@@ -16,7 +16,7 @@ function App() {
           <Route path="/" element={<IndexPage />} />
           <Route path="/survey" element={<SurveyPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/question/:id" element={<QuestionPage />} />
+          <Route path="/question/:sqe" element={<QuestionPage />} />
           <Route path="/result" element={<ResultPage />} />  {/* 수정: ResultPage 사용 */}
         </Routes>
       </Router>
