@@ -4,7 +4,7 @@ import { useApi } from "../ApiContext";
 import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS import
 
 function QuestionPage() {
-  const { id } = useParams();
+  const { sqe } = useParams();
   const navigate = useNavigate();
   const { apiUrl } = useApi();
   const [question, setQuestion] = useState(null);
@@ -32,7 +32,7 @@ function QuestionPage() {
     const fetchQuestionData = async () => {
       try {
         const [questionResponse, totalResponse] = await Promise.all([
-          fetch(`${apiUrl}/questions/${id}`, {
+          fetch(`${apiUrl}/questions/${sqe}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -60,7 +60,6 @@ function QuestionPage() {
         setChoices(
           (questionData.choices || [])
             .filter((choice) => choice.is_active)
-            .sort((a, b) => b.sqe - a.sqe)
         );
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
@@ -71,7 +70,7 @@ function QuestionPage() {
     };
 
     fetchQuestionData();
-  }, [apiUrl, id, navigate, userId]);
+  }, [apiUrl, sqe, navigate, userId]);
 
   const handleChoiceSelect = (choice) => {
     setSelectedChoice(choice);
@@ -86,7 +85,7 @@ function QuestionPage() {
     const updatedAnswers = [...answers, { user_id: userId, choice_id: selectedChoice.id }];
     sessionStorage.setItem("answers", JSON.stringify(updatedAnswers));
     setAnswers(updatedAnswers);
-    navigate(`/question/${parseInt(id) + 1}`);
+    navigate(`/question/${parseInt(sqe) + 1}`);
   };
 
   const handleSubmit = async () => {
@@ -128,7 +127,7 @@ function QuestionPage() {
     );
   }
 
-  const isLastQuestion = parseInt(id) === totalQuestions;
+  const isLastQuestion = parseInt(sqe) === totalQuestions;
 
   return (
     <div className="container-fluid bg-light py-5" style={{ minHeight: "100vh" }}>
@@ -140,8 +139,8 @@ function QuestionPage() {
                 <div 
                   className="progress-bar" 
                   role="progressbar" 
-                  style={{ width: `${(parseInt(id) / totalQuestions) * 100}%` }}
-                  aria-valuenow={(parseInt(id) / totalQuestions) * 100}
+                  style={{ width: `${(parseInt(sqe) / totalQuestions) * 100}%` }}
+                  aria-valuenow={(parseInt(sqe) / totalQuestions) * 100}
                   aria-valuemin="0" 
                   aria-valuemax="100"
                 ></div>
@@ -226,7 +225,7 @@ function QuestionPage() {
               </div>
               
               <div className="text-center mt-3 text-muted">
-                <small>{id} / {totalQuestions} 문항</small>
+                <small>{sqe} / {totalQuestions} 문항</small>
               </div>
             </div>
           </div>
